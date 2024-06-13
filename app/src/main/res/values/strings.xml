@@ -1,0 +1,79 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="register">Don\'t have an account? Register</string>
+    <string name="signup">Not yet registered? SignUp Now</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signuptitle">Sign Up</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="Upload">Upload</string>
+    <string name="namapasien">Masukkan Nama Pasien</string>
+    <string name="usia">Masukkan Usia Pasien</string>
+    <string name="next">Continue</string>
+    <string name="success_login">SUKSES!</string>
+    <string name="email_empty">Email is Empty\n</string>
+    <string name="email_wrong">Email is Wrong</string>
+
+    <string name="welcome_message">Welcome to PneumoVision app</string>
+    <string name="find_resource">Find Your Resource\nHere</string>
+    <string name="search_hint">Search</string>
+    <string name="messages">Messages</string>
+    <string name="favorites">Favorites</string>
+    <string name="share">Share</string>
+    <string name="date">20 June 2024</string>
+    <string name="humidity">45%</string>
+    <string name="day">Monday</string>
+    <string name="home">Home</string>
+    <string name="scan">X-Ray Scan</string>
+    <string name="profile">Profile</string>
+    <string name="searching_for">Searching for: %1$s</string>
+    <string name="profile_clicked">Profile clicked</string>
+    <string name="notifications_clicked">Notifications clicked</string>
+    <string name="messages_clicked">Messages clicked</string>
+    <string name="favorites_clicked">Favorites clicked</string>
+    <string name="share_clicked">Share clicked</string>
+    <string name="home_clicked">Home clicked</string>
+    <string name="scan_clicked">X-Ray Scan clicked</string>
+    <string name="profile_menu_clicked">Profile clicked</string>
+
+    <!-- Profile Activity Strings -->
+    <string name="user_name">Dewangga Rheza</string>
+    <string name="user_email">Dewangga@gmail.com</string>
+    <string name="notification">Notification</string>
+    <string name="personal_information">Personal Information</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="log_out">Log Out</string>
+
+    <!-- Email Activity Strings -->
+    <string name="send_message">Send a Message</string>
+    <string name="send_message_description">Send your message or file directly to the doctor in inbox</string>
+    <string name="name_label">Name :</string>
+    <string name="email_label">Email :</string>
+    <string name="message_label">Message :</string>
+    <string name="attach_file">Attach File</string>
+    <string name="send_message_button">Send Message</string>
+    <string name="title_profile">Profile\n</string>
+    <string name="fullname">nama lengkap</string>
+    <!--    <string name="username">fullname</string>-->
+    <string name="title_sharingpage">menu sharing</string>
+    <string name="title_history">History\n</string>
+    <string name="title_scan">X-Ray Scan</string>
+    <string name="title_home">Home\n</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="description">deskripsi</string>
+    <string name="retry">Retry</string>
+    <string name="emptyImage">Pilih Gambar Terlebih Dahulu.\n</string>
+    <string name="emptyFields">Isikan data dengan benar terlebih dahulu\n</string>
+
+    <string-array name="data_description">klasifikasi penyakit</string-array>
+    <string-array name="data_name">nama penyakit</string-array>
+    <string-array name="data_photo">image</string-array>
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+</resources>
