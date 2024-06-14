@@ -12,6 +12,7 @@ import com.example.myapplication.preference.UserModel
 import com.example.myapplication.response.ListStoryItem
 import com.example.test.data.pref.UserPreference
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 
 class UserRepository private constructor(
     private val userPref: UserPreference
@@ -34,7 +35,9 @@ class UserRepository private constructor(
     }
 
     fun getSession(): Flow<UserModel> {
-        return userPref.getSession()
+        return userPref.getSession().onEach { user ->
+            Log.d("UserRepository", "Token: ${user.token}")
+        }
     }
 
     suspend fun logout() {

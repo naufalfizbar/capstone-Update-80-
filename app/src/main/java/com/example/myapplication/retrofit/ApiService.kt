@@ -6,6 +6,7 @@ import com.example.myapplication.response.FileAddResponse
 import com.example.myapplication.response.LoginResponse
 import com.example.myapplication.response.ProfileResponse
 import com.example.myapplication.response.RegisterResponse
+import com.example.myapplication.response.ScanResponse
 import com.example.myapplication.response.StoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -53,13 +54,13 @@ interface ApiService {
         @Path("id") id: String
     ): Call<DetailResponse>
 
-    @Multipart
-    @POST("sharing")
-    fun uploadImage(
-        @Header("Authorization") token: String,
-        @Part("content") content: RequestBody,
-        //@Part imgUrl: MultipartBody.Part?
-    ): Call<FileAddResponse>
+//    @Multipart
+//    @POST("sharing")
+//    fun uploadImage(
+//        @Header("Authorization") token: String,
+//        @Part("content") content: RequestBody,
+//        //@Part imgUrl: MultipartBody.Part?
+//    ): Call<FileAddResponse>
 
     @GET("profile")
     fun getProfile(@Header("Authorization") token: String): Call<ProfileResponse>
@@ -71,11 +72,22 @@ interface ApiService {
         @Part profileImage: MultipartBody.Part?
     ): Response<ProfileResponse>
 
-    @PUT("users/{uid}")
+    @PUT("profile")
     suspend fun editUser(
         @Header("Authorization") token: String,
         @Path("userId") userId: String,
         @Body userInfo: Map<String, String>
     ): Response<EditProfileResponse>
+
+    @Multipart
+    @POST("predict")  // Ganti dengan endpoint upload gambar Anda
+    fun uploadImage(
+        @Header("Authorization") token: String,
+        @Part photo: MultipartBody.Part,
+        @Part("name") name: RequestBody,
+        @Part("age") age: RequestBody,
+        @Part("gender") gender: RequestBody
+    ): Call<ScanResponse>
+
 
 }

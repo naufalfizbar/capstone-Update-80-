@@ -21,7 +21,7 @@ import com.example.myapplication.R
 import com.example.myapplication.ViewModelFactory
 import com.example.myapplication.databinding.ActivityScanBinding
 import com.example.myapplication.response.ErrorResponse
-import com.example.myapplication.response.FileAddResponse
+import com.example.myapplication.response.ScanResponse
 import com.example.myapplication.retrofit.ApiConfig
 import com.example.myapplication.ui.main.MainActivity
 import com.example.myapplication.ui.welcome.WelcomeActivity
@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import retrofit2.Call
 import retrofit2.Callback
@@ -64,6 +65,7 @@ class ScanActivity : AppCompatActivity() {
                 finish()
             } else {
                 token = user.token
+                Log.d("ScanActivity", "Token: $token") // Log token untuk pengecekan
                 binding.btGallery.setOnClickListener { startGallery() }
                 binding.btUpload.setOnClickListener { uploadImage() }
             }
@@ -142,29 +144,27 @@ class ScanActivity : AppCompatActivity() {
 
             showLoading(true)
 
-            val requestBody = MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("name", name)
-                .addFormDataPart("age", age)
-                .addFormDataPart("gender", gender)
-                .addFormDataPart("photo", imageFile.name, imageFile.asRequestBody("image/jpeg".toMediaType()))
-                .build()
+            val namePart = name.toRequestBody("text/plain".toMediaType())
+            val agePart = age.toRequestBody("text/plain".toMediaType())
+            val genderPart = gender.toRequestBody("text/plain".toMediaType())
+            val photoPart = MultipartBody.Part.createFormData(
+                "photo", imageFile.name, imageFile.asRequestBody("image/jpeg".toMediaType())
+            )
 
             lifecycleScope.launch {
                 try {
                     val apiService = ApiConfig.getApiService()
-                    val response = apiService.uploadImage("Bearer $token", requestBody)
+                    val call = apiService.uploadImage("Bearer $token", photoPart, namePart, agePart, genderPart)
 
-                    response.enqueue(object : Callback<FileAddResponse> {
-                        override fun onResponse(
-                            call: Call<FileAddResponse>,
-                            response: Response<FileAddResponse>
-                        ) {
+                    call.enqueue(object : Callback<ScanResponse> {
+                        override fun onResponse(call: Call<ScanResponse>, response: Response<ScanResponse>) {
                             showLoading(false)
                             if (response.isSuccessful) {
                                 Log.e(ContentValues.TAG, "response Success: ${response.message()}")
                                 showToast("Upload Successful")
-                                backToMainActivity()
+                                response.body()?.let { result ->
+                                    displayResult(result.message)
+                                }
                             } else {
                                 val errorBody = response.errorBody()?.string()
                                 val errorResponse = Gson().fromJson(errorBody, ErrorResponse::class.java)
@@ -173,7 +173,7 @@ class ScanActivity : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<FileAddResponse>, t: Throwable) {
+                        override fun onFailure(call: Call<ScanResponse>, t: Throwable) {
                             showLoading(false)
                             Log.e(ContentValues.TAG, "upload gagal: ${t.message.toString()}")
                             showToast("Upload failed: ${t.message.toString()}")
@@ -187,6 +187,13 @@ class ScanActivity : AppCompatActivity() {
                 }
             }
         } ?: showToast(getString(R.string.emptyImage))
+    }
+
+    private fun displayResult(result: String?) {
+        result?.let {
+            binding.tvResult.text = it
+            binding.tvResult.visibility = View.VISIBLE
+        }
     }
 
     private fun showToast(message: String) {

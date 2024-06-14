@@ -67,6 +67,11 @@ class LoginActivity : AppCompatActivity() {
                     val token = response.loginResult?.token
                     val name = response.loginResult?.name
                     val userId = response.loginResult?.userId ?: "" // Assuming userId is part of the response
+//                    if (token != null) {
+//                        viewModel.saveSession(UserModel(email, token, isLogin = true, name ?: "default_name", userId = userId))
+//                    } else {
+//                        showToast("Token is null or empty")
+//                    }
 
                     // Log the success message from the API
                     Log.d(TAG, "Login successful: $successResponse")
