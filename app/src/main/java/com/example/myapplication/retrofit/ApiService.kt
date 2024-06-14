@@ -1,6 +1,7 @@
 package com.example.myapplication.retrofit
 
 import com.example.myapplication.response.DetailResponse
+import com.example.myapplication.response.EditProfileResponse
 import com.example.myapplication.response.FileAddResponse
 import com.example.myapplication.response.LoginResponse
 import com.example.myapplication.response.ProfileResponse
@@ -10,6 +11,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -68,5 +70,12 @@ interface ApiService {
         @PartMap params: Map<String, @JvmSuppressWildcards RequestBody>,
         @Part profileImage: MultipartBody.Part?
     ): Response<ProfileResponse>
+
+    @PUT("users/{uid}")
+    suspend fun editUser(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: String,
+        @Body userInfo: Map<String, String>
+    ): Response<EditProfileResponse>
 
 }

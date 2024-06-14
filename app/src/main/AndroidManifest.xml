@@ -30,10 +30,10 @@
             android:name=".ui.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.profil.ProfileFragment"
+            android:name=".ui.profile.ProfileFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.profil.EditActivity"
+            android:name=".ui.profile.EditActivity"
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"

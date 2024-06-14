@@ -6,7 +6,7 @@
     android:id="@+id/profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ui.profil.EditActivity">
+    tools:context="ui.profile.EditActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -165,7 +165,7 @@
                     android:layout_height="141dp">
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/saveButton"
                         android:layout_width="150dp"
                         android:layout_height="50dp"
                         android:text="Save"

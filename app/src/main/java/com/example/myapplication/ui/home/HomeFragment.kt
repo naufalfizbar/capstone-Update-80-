@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +14,7 @@ import com.example.myapplication.ViewModelFactory
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.ui.home.HomeViewModel
 import com.example.myapplication.ui.main.MainViewModel
-import com.example.myapplication.ui.profil.EditActivity
+import com.example.myapplication.ui.profile.EditActivity
 import com.example.myapplication.ui.welcome.WelcomeActivity
 
 class HomeFragment : Fragment() {
@@ -45,10 +44,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.historyCardView.setOnClickListener{
-            val intent = Intent(requireContext(), EditActivity::class.java)
-            startActivity(intent)
-        }
+//        binding.historyCardView.setOnClickListener{
+//            val intent = Intent(requireContext(), EditActivity::class.java)
+//            startActivity(intent)
+//        }
 
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             if (!user.isLogin) {

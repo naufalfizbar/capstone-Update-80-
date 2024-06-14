@@ -8,8 +8,7 @@ import com.example.myapplication.ui.login.LoginViewModel
 import com.example.myapplication.repository.UserRepository
 import com.example.myapplication.retrofit.Injection
 import com.example.myapplication.ui.main.MainViewModel
-import com.example.myapplication.ui.profil.ProfileViewModel
-import com.example.test.ui.detail.DetailViewModel
+import com.example.myapplication.ui.profile.EditViewModel
 
 class ViewModelFactory(private val repository: UserRepository) : ViewModelProvider.NewInstanceFactory() {
 
@@ -22,8 +21,8 @@ class ViewModelFactory(private val repository: UserRepository) : ViewModelProvid
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(repository) as T
             }
-            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
-                ProfileViewModel(repository) as T
+            modelClass.isAssignableFrom(EditViewModel::class.java) -> {
+                EditViewModel(repository) as T
             }
             modelClass.isAssignableFrom(ScanViewModel::class.java) -> {
                 ScanViewModel(repository) as T
