@@ -12,11 +12,16 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.myapplication.ViewModelFactory
 import com.example.myapplication.databinding.FragmentProfileBinding
+import com.example.myapplication.response.ProfileResponse
+import com.example.myapplication.retrofit.ApiConfig
 import com.example.myapplication.ui.main.MainViewModel
 import com.example.myapplication.ui.welcome.WelcomeActivity
-import gen._base._base_java__assetres.srcjar.R.id.text
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ProfileFragment : Fragment() {
 
@@ -40,22 +45,15 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Uncomment if logout functionality is needed
-         binding.logoutBtn.setOnClickListener {
-             viewModel.logout()
-         }
+        binding.logoutBtn.setOnClickListener {
+            viewModel.logout()
+        }
 
         binding.editProfileLayout.setOnClickListener {
             val intent = Intent(requireContext(), EditActivity::class.java)
             intent.putExtra("username", binding.nameTextView.text.toString())
-//            intent.putExtra("email", binding.emailTextView.text.toString())
             startActivity(intent)
         }
-
-        // Uncomment if change password functionality is needed
-        // binding.btnChangePassword.setOnClickListener {
-        //     startActivity(Intent(requireContext(), EditPasswordActivity::class.java))
-        // }
 
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             if (!user.isLogin) {
@@ -64,18 +62,9 @@ class ProfileFragment : Fragment() {
                 startActivity(intent)
                 activity?.finish()
             } else {
-                val mainViewModel = obtainViewModel()
-
                 token = user.token
                 Log.d(ContentValues.TAG, "token: $token")
-//                binding.emailTextView.text = user.email
-                binding.nameTextView.text = user.email
-                // Uncomment and implement these lines if you need story data
-                // mainViewModel.getStory(token)
-                // mainViewModel.story.observe(viewLifecycleOwner) { storyList ->
-                //     Log.d(ContentValues.TAG, "Story: $storyList")
-                //     setStoryData(storyList)
-                // }
+                fetchProfile(token)
             }
         }
 
@@ -86,9 +75,28 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun obtainViewModel(): MainViewModel {
-        val factory = ViewModelFactory.getInstance(requireActivity().application)
-        return ViewModelProvider(requireActivity(), factory)[MainViewModel::class.java]
+    private fun fetchProfile(token: String) {
+        val apiService = ApiConfig.getApiService()
+        apiService.getProfile("Bearer $token").enqueue(object : Callback<ProfileResponse> {
+            override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
+                if (response.isSuccessful) {
+                    val profile = response.body()
+                    binding.nameTextView.text = profile?.name
+                    binding.emailTextView.text = profile?.email
+                    profile?.profilePicture?.let { profileUrl ->
+                        Glide.with(this@ProfileFragment)
+                            .load(profileUrl)
+                            .into(binding.profileImageView)
+                    }
+                } else {
+                    Log.e(ContentValues.TAG, "Failed to fetch profile: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+                Log.e(ContentValues.TAG, "Error fetching profile", t)
+            }
+        })
     }
 
     override fun onDestroyView() {

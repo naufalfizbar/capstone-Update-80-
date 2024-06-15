@@ -10,12 +10,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.myapplication.ViewModelFactory
 import com.example.myapplication.databinding.FragmentHomeBinding
+import com.example.myapplication.response.ProfileResponse
+import com.example.myapplication.retrofit.ApiConfig
 import com.example.myapplication.ui.home.HomeViewModel
 import com.example.myapplication.ui.main.MainViewModel
 import com.example.myapplication.ui.profile.EditActivity
 import com.example.myapplication.ui.welcome.WelcomeActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeFragment : Fragment() {
 
@@ -33,12 +39,12 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
+
+//        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+//        val root: View = binding.root
+//        return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,22 +62,39 @@ class HomeFragment : Fragment() {
                 startActivity(intent)
                 activity?.finish()
             } else {
-                val mainViewModel = obtainViewModel()
-
                 token = user.token
+                fetchProfile(token)
                 Log.d(ContentValues.TAG, "token: $token")
-                binding.tvName.text = user.email
+//                binding.tvName.text = user.name
 
-                // Uncomment and implement these lines if you need story data
-                // mainViewModel.getStory(token)
-                // mainViewModel.story.observe(viewLifecycleOwner) { storyList ->
-                //     Log.d(ContentValues.TAG, "Story: $storyList")
-                //     setStoryData(storyList)
-                // }
+
             }
         }
     }
 
+    private fun fetchProfile(token: String) {
+        val apiService = ApiConfig.getApiService()
+        apiService.getProfile("Bearer $token").enqueue(object : Callback<ProfileResponse> {
+            override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
+                if (response.isSuccessful) {
+                    val profile = response.body()
+                    binding.tvName.text = profile?.name
+
+                    profile?.profilePicture?.let { profileUrl ->
+//                        Glide.with(this@ProfileFragment)
+//                            .load(profileUrl)
+//                            .into(binding.profileImageView)
+                    }
+                } else {
+                    Log.e(ContentValues.TAG, "Failed to fetch profile: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+                Log.e(ContentValues.TAG, "Error fetching profile", t)
+            }
+        })
+    }
     private fun obtainViewModel(): MainViewModel {
         val factory = ViewModelFactory.getInstance(requireActivity().application)
         return ViewModelProvider(requireActivity(), factory)[MainViewModel::class.java]

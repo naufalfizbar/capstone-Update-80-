@@ -16,7 +16,7 @@ import com.example.myapplication.ViewModelFactory
 import com.example.myapplication.databinding.ActivityLoginBinding
 import com.example.myapplication.ui.main.MainActivity
 import com.example.myapplication.preference.UserModel
-import com.example.myapplication.response.LoginResponse
+import com.example.myapplication.response.LoginResponse1
 import com.example.myapplication.retrofit.ApiConfig
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -64,19 +64,16 @@ class LoginActivity : AppCompatActivity() {
                     val apiService = ApiConfig.getApiService()
                     val response = apiService.login(email, password)
                     val successResponse = response.message
-                    val token = response.loginResult?.token
-                    val name = response.loginResult?.name
-                    val userId = response.loginResult?.userId ?: "" // Assuming userId is part of the response
-//                    if (token != null) {
-//                        viewModel.saveSession(UserModel(email, token, isLogin = true, name ?: "default_name", userId = userId))
-//                    } else {
-//                        showToast("Token is null or empty")
-//                    }
+                    val token = response.token 
 
                     // Log the success message from the API
                     Log.d(TAG, "Login successful: $successResponse")
 
-                    viewModel.saveSession(UserModel(email, token.toString(), isLogin = true, name ?: "default_name", userId = userId))
+                    if (token != null) {
+                        viewModel.saveSession(UserModel(email, token, isLogin = true, name = "default_name", userId = "default_userId"))
+                    } else {
+                        showToast("Token is null or empty")
+                    }
 
                     AlertDialog.Builder(this@LoginActivity).apply {
                         setTitle("Yeah!")
@@ -94,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
                 } catch (e: HttpException) {
                     val errorBody = e.response()?.errorBody()?.string()
                     if (!errorBody.isNullOrEmpty()) {
-                        val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
+                        val errorResponse = Gson().fromJson(errorBody, LoginResponse1::class.java)
                         showToast(errorResponse.message)
                     } else {
                         showToast("Unknown error occurred")
@@ -118,6 +115,7 @@ class LoginActivity : AppCompatActivity() {
         private const val TAG = "LoginActivity"
     }
 }
+
 
 
 

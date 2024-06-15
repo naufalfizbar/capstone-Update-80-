@@ -6,4 +6,5 @@ data class UserModel(
     val isLogin: Boolean = false,
     val name: String,
     val userId: String
+//    val profileImageUrl: String? = null
 )

@@ -4,6 +4,7 @@ import com.example.myapplication.response.DetailResponse
 import com.example.myapplication.response.EditProfileResponse
 import com.example.myapplication.response.FileAddResponse
 import com.example.myapplication.response.LoginResponse
+import com.example.myapplication.response.LoginResponse1
 import com.example.myapplication.response.ProfileResponse
 import com.example.myapplication.response.RegisterResponse
 import com.example.myapplication.response.ScanResponse
@@ -39,7 +40,7 @@ interface ApiService {
     suspend fun login(
         @Field("email") email: String,
         @Field("password") password: String
-    ): LoginResponse
+    ): LoginResponse1
 
     @GET("stories")
     fun getStories(
@@ -78,6 +79,13 @@ interface ApiService {
         @Path("userId") userId: String,
         @Body userInfo: Map<String, String>
     ): Response<EditProfileResponse>
+
+    @Multipart
+    @POST("upload/profile")
+    fun uploadProfilePicture(
+        @Part image: MultipartBody.Part,
+        @Part("userId") userId: RequestBody
+    ): Call<EditProfileResponse>
 
     @Multipart
     @POST("predict")  // Ganti dengan endpoint upload gambar Anda
